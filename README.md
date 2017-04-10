@@ -13,6 +13,6 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 4. Navigate to the same folder. (Where source file and the python file were placed.)
 5. Please type
 
-	```*python3 demoMain.py*```
+	```python3 demoMain.py```
 
 Output will contain various recommendation percentages in different parameters.			

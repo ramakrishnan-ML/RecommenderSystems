@@ -3,20 +3,21 @@ import sys
 from xlrd import open_workbook
 def marginalErrorReading():
     for sheet in margErrTable.sheets():
-        if sheet.name == 'Sheet2':
+        if sheet.name == 'Output':
             global margRows, margCols
             margRows = sheet.nrows
             margCols = sheet.ncols
             for col in range(sheet.ncols):
                 values = [] ## Localised values for a row
-                for row in range(sheet.nrows):
-                    data = sheet.cell(row, col).value
-                    if row == 0:
-                        headers.append(data)
-                    else:
-                        values.append(data)
-                if(row > 0):
-                    margErrRed.append(values)
+                if(col != 0):
+                    for row in range(sheet.nrows):
+                        data = sheet.cell(row, col).value
+                        if row == 0:
+                            headers.append(data)
+                        else:
+                            values.append(data)
+                    if(row > 0):
+                        margErrRed.append(values)
 
 def pickLeastValues():
     leastValues = [] # Pick least values in each params.
@@ -40,7 +41,7 @@ def pickLeastParams(minValuesList):
             paramTempPos = paramTempPos + 1
         else:
             paramTempPos = paramTempPos + 1
-    recoPercentage = (minParamValuePos * 10)
+    recoPercentage = ((minParamValuePos * 10) - 10) #Since the reco percentage starts from 0
     return recoPercentage
 
 def overWriting(colToBeAltered):
@@ -50,18 +51,21 @@ def overWriting(colToBeAltered):
     for i in range(margRows - 1):
         margErrRed[colToBeAltered - 1][i] = sys.maxsize
 
-margErrTable = open_workbook('LEDsafari Analysis.xlsx')
+margErrTable = open_workbook('Demo Mapper.xlsx')
 global margErrRed
 margErrRed = []
 global headers
 headers = []
+global changePercent
+changePercent = []
 marginalErrorReading()
-totalParameters = 3 ## Hardcode of parameters based on the no.of parameters chosen.
+totalParameters = 4 ## Hardcode of parameters based on the no.of parameters chosen.
 for i in range(totalParameters):
     minValues = pickLeastValues()
     #print(minValues)
     recoPercentage = pickLeastParams(minValues)
-    print ("The recommendation percentage is ", recoPercentage, "in Parameter : ", minParam )
+    parameter = headers[minParam - 1]
+    print ("The recommendation percentage is ", recoPercentage, "in Parameter : ", parameter )
     if(i != totalParameters - 1): ## Since i iterates from 0.
         print("Or")
     overWriting(minParam)

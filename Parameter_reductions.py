@@ -50,9 +50,10 @@ def CalcGValues(gname, parList, constList):
         K12 = constList[11]
         P11 = parList[10]
         K13 = constList[12]
+        K20 = constList[19]
 
         g = (52.14 * ((P01 * K03 * K01) + (P02 * K04 * K01) + (7 * P09 * K11 * K02) +
-                     (P10 * K12 * 0.5 * K01) + (P11 * K13 * K01)))
+                     (P10 * K12 * 0.5 * K20) + (P11 * K13 * K20)))
 
     ### GU laundry ###
     if(gname == 'G4'):
@@ -184,7 +185,7 @@ def ReduceEmissions(redRate):
     return False
 
 #################### Hardcoded values - File details ################################
-file = 'BetaCalculator_Update 3.0.5.xlsx'
+file = 'BetaCalculator_Update 3.0.6.xlsx'
 defaultSheet = 'Data Aggregation'
 WB = opyxl.load_workbook(file, data_only= True)
 WS = WB[defaultSheet]
@@ -200,11 +201,11 @@ paramCellEnd = 17
 
 constCellIndex = 'F'
 constCellStart = 21
-constCellEnd = 39
+constCellEnd = 40
 
 constValCellIndex = 'G'
 constValCellStart = 21
-constVallCellEnd = 39
+constVallCellEnd = 40
 
 #################### Hard coded values - GU-Param relations #########################
 ##Note: Index starts from zero.
@@ -242,6 +243,7 @@ guTV = CalcGValues('G2', freqList, constValList)
 guKitchen = CalcGValues('G3', freqList, constValList)
 guLaundry = CalcGValues('G4',  freqList, constValList)
 guTotal = GetGUTotal()
+print(guTotal)
 guFood = 0.0 ## Hardcoded value
 guList = MakeGuList()
 recoFlag = RecommendationChecker()

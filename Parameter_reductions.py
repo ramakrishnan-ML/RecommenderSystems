@@ -7,11 +7,13 @@ def ReadValues(cellStr, cellStart, cellEnd):
             cellIndex+= str(i)
             values.append(WS[cellIndex].value)
         return values
+
 def DictMapping(keyParam, valueFreq, dict):
     if(dict == 'Freq'):
         paramFreqDict[keyParam] = valueFreq
     if(dict == 'Const'):
         constDict[keyParam] = valueFreq
+
 #################### Formula relations - G vs Param vs Constants #############
 def CalcGValues(gname, parList, constList):
     ### GU lighting ###
@@ -65,18 +67,23 @@ def CalcGValues(gname, parList, constList):
 
         g = 52.14 * ((P07 * K19) + (P08 * K10 * K02))
     return g
+
 def GetGUTotal():
     return (guLighting + guTV + guKitchen + guLaundry)
+
 def MakeGuList():
     list = [guLighting, guTV, guKitchen, guLaundry, guFood]
     return list
+
 def RecommendationChecker():
     if(guTotal > 500):
         return True
     else:
         return False
+
 def PickMaxGU():
     return guList.index(max(guList))
+
 def GetGUParams(gu):
     if(gu == 0):
         return paramForGuLighting
@@ -86,106 +93,147 @@ def GetGUParams(gu):
         return paramForGUKitchen
     if(gu == 3):
         return paramForGULaundry
+
 def ImpactAnalysis(new, old):
+       # print("old", old)
+       # print("new", new)
         return (old - new)
+
 def PickMaxImpact(current, new):
-    if(new >= current):
+    #print("current", current)
+    #print("new", new)
+
+    if(new > current):
         return True
     else:
         return False
+
 def FindParamImpact(index1, redRate, paramList):
     originalGU = guList[index1]
     defaultImpact = 0.0
-    impactParam = []
+    impactParam = [-1]
     tentativePar = []
     redVal = 0.0
     reduction = 0.0
-    for val in paramList:
-        tentativePar = freqList[:] ## Python learning : Copies the values instead of reference.
-        reduction = (tentativePar[val] * redRate)
-        tentativePar[val] = reduction
-        gnameStr = 'G'
-        gnameStr += str(index1 + 1) #Note: G doesn't follow the index concept.
-        newGU = CalcGValues(gnameStr, tentativePar, constValList)
-        newImpact = ImpactAnalysis(newGU, originalGU)
-        impactChecker = PickMaxImpact(defaultImpact, newImpact)
-        if(impactChecker is True):
-            impactParam.append(val)
-            defaultImpact = newImpact
-            redVal = reduction
+    print(paramList)
+    if(paramList is not None):
+        for val in paramList:
+            tentativePar = freqList[:] ## Python learning : Copies the values instead of reference.
+            reduction = (tentativePar[val] * redRate)
+            tentativePar[val] = reduction
+            gnameStr = 'G'
+            gnameStr += str(index1 + 1) #Note: G doesn't follow the index concept.
+           # print("tentative par",tentativePar)
+            newGU = CalcGValues(gnameStr, tentativePar, constValList)
+            newImpact = ImpactAnalysis(newGU, originalGU)
+            impactChecker = PickMaxImpact(defaultImpact, newImpact)
+           # print(impactChecker)
+            if(impactChecker is True):
+                ## Scope of enhancement in future. Now it is coded in a way that impact param list always has 1 element.
+                ## In future, impact param can be changed to a float variable instead of list. But it needs good (..)
+                ## (..)changes in the code.
+                impactParam[0] = val
+                defaultImpact = newImpact
+                redVal = reduction
+           # print(impactParam)
     return impactParam, redVal, tentativePar
+
 def StoreParListTemp(parlist, impactParams, presentGu, presentRate, paramChange):
+    global parIndex
     global guNow
     guNow = presentGu
     global tempParList
     tempParList = parlist[:]
     global reductionRate
-    reductionRate = (presentRate - 0.2)
+    if(reductionRate == 0.7):
+        reductionRate = 0.5 ## Reason not subtracting 0.2 from 0.7 : To avoid 0.49999999999999994 bug
+    else:
+        reductionRate = (presentRate - 0.2)
     global paramChangeFlag
     paramChangeFlag = paramChange
 
     if(paramChange is True):
         ##Note: Removal of parameter which has been reduced to 50%
-        for val in impactParams:
-            tempParList = tempParList.remove(val)
+        parIndex += 1
+
 
 def GetParListTemp():
     return tempParList
+
 def GetPresentGU():
     return guNow
+
 def StoreFirstTimeFlag(str):
     global flag
     flag = str
+
 def GetFirstTimeFlag():
     return flag
+
 def GetRate():
     return reductionRate
+
 def GetParamFlag():
     return paramChangeFlag
-def ReduceEmissions(redRate):
+
+def ReduceEmissions(redRate, originalFreqFlag):
+    global originalFrequency
     global freqList
     global guTotal
     global guList
     global parListTemp
-    rate = redRate
+    global guTotalNow
 
+
+    rate = redRate
+    if(originalFreqFlag == True):
+        freqList = originalFrequency
     maxGUIndex = PickMaxGU()
     firstTimeFlag = GetFirstTimeFlag()
     if(firstTimeFlag is True):
         parListTemp = GetGUParams(maxGUIndex)
-        StoreFirstTimeFlag('False')
+        StoreFirstTimeFlag(False)
     else:
         parListTemp = GetParListTemp()
+        if(parIndex > 0):
+            parListTemp = parListTemp[parIndex:]
+        print(parListTemp)
 
     maxParImp, reducedValue, newFreqList = FindParamImpact(maxGUIndex, rate, parListTemp)
     freqList = newFreqList[:]
-    guTotalNow = -1.0
-
+    gu = 0.0
     for val in maxParImp:
         freqList[val] = reducedValue
         gnameStr = 'G'
         gnameStr += str(maxGUIndex + 1)
         print(freqList)
         gu = CalcGValues(gnameStr, freqList, constValList)
-        guTotalNow = ((guTotal - guList[maxGUIndex]) + gu)
-        print(guTotalNow)
+        guTotalNow = ((guTotalNow - guList[maxGUIndex]) + gu)
 
-    if((guTotalNow > 500) & (rate > 0.5)):
+    print(rate)
+    print(guTotalNow)
+    if((guTotalNow > 500) & (rate >0.5)):
         StoreParListTemp(parListTemp , maxParImp, gu, rate, False)
         guList[maxGUIndex] = gu
         guTotal = GetGUTotal()
         return True ## Note: Please keep in mind that while returning it has an updated freq list.
 
-
-    elif((guTotalNow > 500) & (rate < 0.5)):
+    elif((guTotalNow > 500) & (rate == 0.5)):
         StoreParListTemp(parListTemp , maxParImp, gu, rate, True)
         guList[maxGUIndex] = gu
         guTotal = GetGUTotal()
         return True
     return False
 
+def StoreOriginalFrequency(list):
+    global originalFrequency
+    originalFrequency = list[:]
+
+def GetOriginalFrequency():
+    return originalFrequency
+
 #################### Hardcoded values - File details ################################
-file = 'BetaCalculator_Update 3.0.6.xlsx'
+file = 'Data/BetaCalculator_Update 3.0.6_t2.xlsx'
 defaultSheet = 'Data Aggregation'
 WB = opyxl.load_workbook(file, data_only= True)
 WS = WB[defaultSheet]
@@ -219,9 +267,14 @@ tempParList = []
 flag = True
 parListTemp = []
 paramChangeFlag = False
+originalFrequency = []
+parIndex = 0
+
+
 ################### Iteration function calls #########################################
 frequency = ReadValues(freqCellIndex, freqCellStart, freqCellEnd)
 freqList = list(map(float, frequency))
+StoreOriginalFrequency(freqList)
 parameter = ReadValues(paramCellIndex, paramCellStart, paramCellEnd)
 
 index = 0
@@ -243,21 +296,41 @@ guTV = CalcGValues('G2', freqList, constValList)
 guKitchen = CalcGValues('G3', freqList, constValList)
 guLaundry = CalcGValues('G4',  freqList, constValList)
 guTotal = GetGUTotal()
-print(guTotal)
+guTotalNow = guTotal
 guFood = 0.0 ## Hardcoded value
 guList = MakeGuList()
 recoFlag = RecommendationChecker()
 reductionRate = 0.9
+print(originalFrequency)
+#print("gu list is ", guList)
 while (recoFlag is True):
     paramChangeFlag = GetParamFlag()
     if(paramChangeFlag == False):
-        recoFlag = ReduceEmissions(reductionRate)
+        recoFlag = ReduceEmissions(reductionRate, True)
     else:
+        guLighting = CalcGValues('G1', freqList, constValList)
+        guTV = CalcGValues('G2', freqList, constValList)
+        guKitchen = CalcGValues('G3', freqList, constValList)
+        guLaundry = CalcGValues('G4',  freqList, constValList)
+        guTotal = GetGUTotal()
+        guTotalNow = guTotal
+        guFood = 0.0 ## Hardcoded value
+        guList = MakeGuList()
+        #print("gu list now is ", guList)
         reductionRate = 0.9
-        recoFlag = ReduceEmissions(reductionRate)
+        recoFlag = ReduceEmissions(reductionRate, False)
+        break
 
+'''
+##Todo: Remove break and try to make iterations further.
+    ##Todo: 1) Remove break.
+            2) Print further iterations.
+            3) Find out the issue.
 
-
+##Todo:
+    1) Need to keep params list & GU (If all params in it) which has been reduced to maximum limit.
+    2) No need to alter GU as point 1 takes care of it.
+'''
 
 
 

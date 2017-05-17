@@ -17,6 +17,6 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 	```pip3 install openpyxl``` 
 6. Please type
 
-	```Python3 Parameter_reductions.py```
+	```python3 Parameter_reductions.py```
 
 Output will contain various recommendation percentages in different parameters.			

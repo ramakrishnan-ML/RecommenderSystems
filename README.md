@@ -12,10 +12,11 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 2. Download Parameter_reductions.py (Clone or download option in right top) in the same folder.
 3. Open terminal in Mac or Command prompt in windows.
 4. Navigate to the same folder. (Where python file was placed.)
-5. Please type
+5. Please type (For installation of openpyxl module)
+
 	```pip3 install openpyxl``` 
 6. Please type
 
-	```Parameter_reductions.py```
+	```Python3 Parameter_reductions.py```
 
 Output will contain various recommendation percentages in different parameters.			

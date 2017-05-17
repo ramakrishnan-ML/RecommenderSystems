@@ -319,7 +319,7 @@ while (recoFlag is True):
         #print("gu list now is ", guList)
         reductionRate = 0.9
         recoFlag = ReduceEmissions(reductionRate, False)
-        break
+        
 
 '''
 ##Todo: Remove break and try to make iterations further.

@@ -233,7 +233,7 @@ def GetOriginalFrequency():
     return originalFrequency
 
 #################### Hardcoded values - File details ################################
-file = 'Data/BetaCalculator_Update 3.0.6_t2.xlsx'
+file = 'Data/source.xlsx'
 defaultSheet = 'Data Aggregation'
 WB = opyxl.load_workbook(file, data_only= True)
 WS = WB[defaultSheet]
@@ -319,7 +319,7 @@ while (recoFlag is True):
         #print("gu list now is ", guList)
         reductionRate = 0.9
         recoFlag = ReduceEmissions(reductionRate, False)
-        
+        parIndex = 0 
 
 '''
 ##Todo: Remove break and try to make iterations further.

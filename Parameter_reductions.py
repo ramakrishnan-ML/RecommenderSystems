@@ -115,12 +115,15 @@ def FindParamImpact(index1, redRate, paramList):
     tentativePar = []
     redVal = 0.0
     reduction = 0.0
-    print(paramList)
     if(paramList is not None):
         for val in paramList:
-            tentativePar = freqList[:] ## Python learning : Copies the values instead of reference.
-            reduction = (tentativePar[val] * redRate)
-            tentativePar[val] = reduction
+            tentativePar = presentFreq[:] ## Python learning : Copies the values instead of reference.
+            reduction = (tentativePar[val] * redRate) ## Reduction from original value.
+            if(redRate == 0.7):
+                reduction = (tentativePar[val] * 0.78) ## Since we need to reduce the value from 0.9% (Not from the original values)
+            if(redRate == 0.5):
+                reduction = (tentativePar[val] * 0.71)## Since we need to reduce the value from 0.7% (Not from the original values)
+            tentativePar[val] = reduction 
             gnameStr = 'G'
             gnameStr += str(index1 + 1) #Note: G doesn't follow the index concept.
            # print("tentative par",tentativePar)
@@ -136,6 +139,7 @@ def FindParamImpact(index1, redRate, paramList):
                 defaultImpact = newImpact
                 redVal = reduction
            # print(impactParam)
+    print("tentative par", tentativePar)
     return impactParam, redVal, tentativePar
 
 def StoreParListTemp(parlist, impactParams, presentGu, presentRate, paramChange):
@@ -176,6 +180,17 @@ def GetRate():
 def GetParamFlag():
     return paramChangeFlag
 
+def SetPresentFrequency(freqlist):
+    global presentFeq
+    presentFreq = freqlist[:]
+    print("Present freq in set", presentFreq )
+
+def GetPresentFrequency():
+    global presentFreq
+    print("Present freq in get", presentFreq)
+    return presentFreq
+    
+
 def ReduceEmissions(redRate, originalFreqFlag):
     global originalFrequency
     global freqList
@@ -183,11 +198,13 @@ def ReduceEmissions(redRate, originalFreqFlag):
     global guList
     global parListTemp
     global guTotalNow
-
+    global presentFreq
 
     rate = redRate
     if(originalFreqFlag == True):
         freqList = originalFrequency
+    else:
+        freqList[:] = presentFreq
     maxGUIndex = PickMaxGU()
     firstTimeFlag = GetFirstTimeFlag()
     if(firstTimeFlag is True):
@@ -197,19 +214,22 @@ def ReduceEmissions(redRate, originalFreqFlag):
         parListTemp = GetParListTemp()
         if(parIndex > 0):
             parListTemp = parListTemp[parIndex:]
-        print(parListTemp)
+        print("par list temp", parListTemp)
 
     maxParImp, reducedValue, newFreqList = FindParamImpact(maxGUIndex, rate, parListTemp)
     freqList = newFreqList[:]
+    presentFreq = freqList[:]
+    print("New frequency list", newFreqList)
     gu = 0.0
     for val in maxParImp:
+        print("Reduced value", reducedValue)
         freqList[val] = reducedValue
         gnameStr = 'G'
         gnameStr += str(maxGUIndex + 1)
         print(freqList)
         gu = CalcGValues(gnameStr, freqList, constValList)
         guTotalNow = ((guTotalNow - guList[maxGUIndex]) + gu)
-
+    
     print(rate)
     print(guTotalNow)
     if((guTotalNow > 500) & (rate >0.5)):
@@ -269,11 +289,13 @@ parListTemp = []
 paramChangeFlag = False
 originalFrequency = []
 parIndex = 0
+presentFreq = []
 
 
 ################### Iteration function calls #########################################
 frequency = ReadValues(freqCellIndex, freqCellStart, freqCellEnd)
 freqList = list(map(float, frequency))
+presentFreq = freqList[:]
 StoreOriginalFrequency(freqList)
 parameter = ReadValues(paramCellIndex, paramCellStart, paramCellEnd)
 
@@ -301,12 +323,16 @@ guFood = 0.0 ## Hardcoded value
 guList = MakeGuList()
 recoFlag = RecommendationChecker()
 reductionRate = 0.9
+iterationCount = 0
 print(originalFrequency)
 #print("gu list is ", guList)
 while (recoFlag is True):
     paramChangeFlag = GetParamFlag()
     if(paramChangeFlag == False):
-        recoFlag = ReduceEmissions(reductionRate, True)
+        if(iterationCount == 0):
+            recoFlag = ReduceEmissions(reductionRate, True)
+        else:
+            recoFlag = ReduceEmissions(reductionRate, False)
     else:
         guLighting = CalcGValues('G1', freqList, constValList)
         guTV = CalcGValues('G2', freqList, constValList)
@@ -320,17 +346,9 @@ while (recoFlag is True):
         reductionRate = 0.9
         recoFlag = ReduceEmissions(reductionRate, False)
         parIndex = 0 
+        iterationCount = 1
+    presentFreq = freqList[:]
 
-'''
-##Todo: Remove break and try to make iterations further.
-    ##Todo: 1) Remove break.
-            2) Print further iterations.
-            3) Find out the issue.
-
-##Todo:
-    1) Need to keep params list & GU (If all params in it) which has been reduced to maximum limit.
-    2) No need to alter GU as point 1 takes care of it.
-'''
 
 
 

@@ -100,8 +100,8 @@ def ImpactAnalysis(new, old):
         return (old - new)
 
 def PickMaxImpact(current, new):
-    print("current", current)
-    print("new", new)
+   # print("current", current)
+   # print("new", new)
 
     if(new > current):
         return True
@@ -130,7 +130,7 @@ def FindParamImpact(index1, redRate, paramList):
             newGU = CalcGValues(gnameStr, tentativePar, constValList)
             newImpact = ImpactAnalysis(newGU, originalGU)
             impactChecker = PickMaxImpact(defaultImpact, newImpact)
-            print(impactChecker)
+         #   print(impactChecker)
 
             if(impactChecker is True):
                 ## Scope of enhancement in future. Now it is coded in a way that impact param list always has 1 element.
@@ -138,12 +138,10 @@ def FindParamImpact(index1, redRate, paramList):
                 ## (..)changes in the code.
                 impactParam[0] = val
                 defaultImpact = newImpact
-                print("The reduction is ", reduction)
+             #   print("The reduction is ", reduction)
                 redVal = reduction
            # print(impactParam)
-    elif(paramList is None):
-        print("BOss am none")
-    print("tentative par", tentativePar)
+   # print("tentative par", tentativePar)
     return impactParam, redVal, tentativePar
 
 def StoreParListTemp(parlist, impactParams, presentGu, presentRate, paramChange):
@@ -165,10 +163,10 @@ def StoreParListTemp(parlist, impactParams, presentGu, presentRate, paramChange)
          # parIndex += 1
         if(impactParams[0] > -1):
             removePar = impactParams[0]
-            print("Temp par list is ", tempParList)
-            print("Remove par is", removePar)
+          #  print("Temp par list is ", tempParList)
+          #  print("Remove par is", removePar)
             tempParList.remove(removePar)
-            print("Impact params value is", impactParams[0])
+          #  print("Impact params value is", impactParams[0])
         elif(impactParams[0] == -1):
             print("GU is saturated. Look for new one")
             tempParList = []
@@ -196,11 +194,11 @@ def GetParamFlag():
 def SetPresentFrequency(freqlist):
     global presentFeq
     presentFreq = freqlist[:]
-    print("Present freq in set", presentFreq )
+   # print("Present freq in set", presentFreq )
 
 def GetPresentFrequency():
     global presentFreq
-    print("Present freq in get", presentFreq)
+  #  print("Present freq in get", presentFreq)
     return presentFreq
     
 
@@ -227,7 +225,7 @@ def ReduceEmissions(redRate, originalFreqFlag):
         parListTemp = GetParListTemp()
         #if(parIndex > 0):
            # parListTemp = parListTemp[parIndex:]
-        print("par list temp", parListTemp)
+    #    print("par list temp", parListTemp)
     if(len(parListTemp) > 0):
         maxParImp, reducedValue, newFreqList = FindParamImpact(maxGUIndex, rate, parListTemp)
         freqList = newFreqList[:]
@@ -243,8 +241,8 @@ def ReduceEmissions(redRate, originalFreqFlag):
             gu = CalcGValues(gnameStr, freqList, constValList)
             guTotalNow = ((guTotalNow - guList[maxGUIndex]) + gu)
     
-        print(rate)
-        print(guTotalNow)
+       # print(rate)
+       # print(guTotalNow)
         if((guTotalNow > 500) & (rate >0.5)):
             StoreParListTemp(parListTemp , maxParImp, gu, rate, False)
             guList[maxGUIndex] = gu
@@ -337,7 +335,7 @@ guList = MakeGuList()
 recoFlag = RecommendationChecker()
 reductionRate = 0.9
 iterationCount = 0
-print(originalFrequency)
+print("Before recommendation",originalFrequency,"\n")
 #print("gu list is ", guList)
 while (recoFlag is True):
     paramChangeFlag = GetParamFlag()
@@ -361,7 +359,9 @@ while (recoFlag is True):
         #parIndex = 0 
         iterationCount = 1
     presentFreq = freqList[:]
-
+ 
+print("\n")
+print("After recommendation", freqList)
 
 
 

@@ -100,8 +100,8 @@ def ImpactAnalysis(new, old):
         return (old - new)
 
 def PickMaxImpact(current, new):
-    #print("current", current)
-    #print("new", new)
+    print("current", current)
+    print("new", new)
 
     if(new > current):
         return True
@@ -130,15 +130,19 @@ def FindParamImpact(index1, redRate, paramList):
             newGU = CalcGValues(gnameStr, tentativePar, constValList)
             newImpact = ImpactAnalysis(newGU, originalGU)
             impactChecker = PickMaxImpact(defaultImpact, newImpact)
-           # print(impactChecker)
+            print(impactChecker)
+
             if(impactChecker is True):
                 ## Scope of enhancement in future. Now it is coded in a way that impact param list always has 1 element.
                 ## In future, impact param can be changed to a float variable instead of list. But it needs good (..)
                 ## (..)changes in the code.
                 impactParam[0] = val
                 defaultImpact = newImpact
+                print("The reduction is ", reduction)
                 redVal = reduction
            # print(impactParam)
+    elif(paramList is None):
+        print("BOss am none")
     print("tentative par", tentativePar)
     return impactParam, redVal, tentativePar
 
@@ -158,8 +162,17 @@ def StoreParListTemp(parlist, impactParams, presentGu, presentRate, paramChange)
 
     if(paramChange is True):
         ##Note: Removal of parameter which has been reduced to 50%
-        parIndex += 1
-
+         # parIndex += 1
+        if(impactParams[0] > -1):
+            removePar = impactParams[0]
+            print("Temp par list is ", tempParList)
+            print("Remove par is", removePar)
+            tempParList.remove(removePar)
+            print("Impact params value is", impactParams[0])
+        elif(impactParams[0] == -1):
+            print("GU is saturated. Look for new one")
+            tempParList = []
+            
 
 def GetParListTemp():
     return tempParList
@@ -212,38 +225,38 @@ def ReduceEmissions(redRate, originalFreqFlag):
         StoreFirstTimeFlag(False)
     else:
         parListTemp = GetParListTemp()
-        if(parIndex > 0):
-            parListTemp = parListTemp[parIndex:]
+        #if(parIndex > 0):
+           # parListTemp = parListTemp[parIndex:]
         print("par list temp", parListTemp)
-
-    maxParImp, reducedValue, newFreqList = FindParamImpact(maxGUIndex, rate, parListTemp)
-    freqList = newFreqList[:]
-    presentFreq = freqList[:]
-    print("New frequency list", newFreqList)
-    gu = 0.0
-    for val in maxParImp:
-        print("Reduced value", reducedValue)
-        freqList[val] = reducedValue
-        gnameStr = 'G'
-        gnameStr += str(maxGUIndex + 1)
-        print(freqList)
-        gu = CalcGValues(gnameStr, freqList, constValList)
-        guTotalNow = ((guTotalNow - guList[maxGUIndex]) + gu)
+    if(len(parListTemp) > 0):
+        maxParImp, reducedValue, newFreqList = FindParamImpact(maxGUIndex, rate, parListTemp)
+        freqList = newFreqList[:]
+        presentFreq = freqList[:]
+        print("New frequency list", newFreqList)
+        gu = 0.0
+        for val in maxParImp:
+            print("Reduced value", reducedValue)
+            freqList[val] = reducedValue
+            gnameStr = 'G'
+            gnameStr += str(maxGUIndex + 1)
+            print(freqList)
+            gu = CalcGValues(gnameStr, freqList, constValList)
+            guTotalNow = ((guTotalNow - guList[maxGUIndex]) + gu)
     
-    print(rate)
-    print(guTotalNow)
-    if((guTotalNow > 500) & (rate >0.5)):
-        StoreParListTemp(parListTemp , maxParImp, gu, rate, False)
-        guList[maxGUIndex] = gu
-        guTotal = GetGUTotal()
-        return True ## Note: Please keep in mind that while returning it has an updated freq list.
+        print(rate)
+        print(guTotalNow)
+        if((guTotalNow > 500) & (rate >0.5)):
+            StoreParListTemp(parListTemp , maxParImp, gu, rate, False)
+            guList[maxGUIndex] = gu
+            guTotal = GetGUTotal()
+            return True ## Note: Please keep in mind that while returning it has an updated freq list.
 
-    elif((guTotalNow > 500) & (rate == 0.5)):
-        StoreParListTemp(parListTemp , maxParImp, gu, rate, True)
-        guList[maxGUIndex] = gu
-        guTotal = GetGUTotal()
-        return True
-    return False
+        elif((guTotalNow > 500) & (rate == 0.5)):
+            StoreParListTemp(parListTemp , maxParImp, gu, rate, True)
+            guList[maxGUIndex] = gu
+            guTotal = GetGUTotal()
+            return True
+        return False
 
 def StoreOriginalFrequency(list):
     global originalFrequency
@@ -253,7 +266,7 @@ def GetOriginalFrequency():
     return originalFrequency
 
 #################### Hardcoded values - File details ################################
-file = 'Data/source.xlsx'
+file = 'Data/source1.xlsx'
 defaultSheet = 'Data Aggregation'
 WB = opyxl.load_workbook(file, data_only= True)
 WS = WB[defaultSheet]
@@ -288,7 +301,7 @@ flag = True
 parListTemp = []
 paramChangeFlag = False
 originalFrequency = []
-parIndex = 0
+#parIndex = 0
 presentFreq = []
 
 
@@ -345,7 +358,7 @@ while (recoFlag is True):
         #print("gu list now is ", guList)
         reductionRate = 0.9
         recoFlag = ReduceEmissions(reductionRate, False)
-        parIndex = 0 
+        #parIndex = 0 
         iterationCount = 1
     presentFreq = freqList[:]
 

@@ -202,7 +202,7 @@ def GetPresentFrequency():
     return presentFreq
     
 
-def ReduceEmissions(redRate, originalFreqFlag):
+def ReduceEmissions(redRate, originalFreqFlag, target):
     global originalFrequency
     global freqList
     global guTotal
@@ -243,13 +243,13 @@ def ReduceEmissions(redRate, originalFreqFlag):
     
        # print(rate)
        # print(guTotalNow)
-        if((guTotalNow > 500) & (rate >0.5)):
+        if((guTotalNow > target) & (rate >0.5)):
             StoreParListTemp(parListTemp , maxParImp, gu, rate, False)
             guList[maxGUIndex] = gu
             guTotal = GetGUTotal()
             return True ## Note: Please keep in mind that while returning it has an updated freq list.
 
-        elif((guTotalNow > 500) & (rate == 0.5)):
+        elif((guTotalNow > target) & (rate == 0.5)):
             StoreParListTemp(parListTemp , maxParImp, gu, rate, True)
             guList[maxGUIndex] = gu
             guTotal = GetGUTotal()
@@ -262,6 +262,14 @@ def StoreOriginalFrequency(list):
 
 def GetOriginalFrequency():
     return originalFrequency
+
+## High and low target sets.
+def SetTarget():
+    if(guTotal >= 1000):
+        targ = 1000
+    else:
+        targ = 500
+    return targ    
 
 #################### Hardcoded values - File details ################################
 file = 'Data/source1.xlsx'
@@ -337,13 +345,15 @@ reductionRate = 0.9
 iterationCount = 0
 print("Before recommendation",originalFrequency,"\n")
 #print("gu list is ", guList)
+set_target = SetTarget()
+
 while (recoFlag is True):
     paramChangeFlag = GetParamFlag()
     if(paramChangeFlag == False):
         if(iterationCount == 0):
-            recoFlag = ReduceEmissions(reductionRate, True)
+            recoFlag = ReduceEmissions(reductionRate, True, set_target)
         else:
-            recoFlag = ReduceEmissions(reductionRate, False)
+            recoFlag = ReduceEmissions(reductionRate, False, set_target)
     else:
         guLighting = CalcGValues('G1', freqList, constValList)
         guTV = CalcGValues('G2', freqList, constValList)
@@ -355,7 +365,7 @@ while (recoFlag is True):
         guList = MakeGuList()
         #print("gu list now is ", guList)
         reductionRate = 0.9
-        recoFlag = ReduceEmissions(reductionRate, False)
+        recoFlag = ReduceEmissions(reductionRate, False, set_target)
         #parIndex = 0 
         iterationCount = 1
     presentFreq = freqList[:]

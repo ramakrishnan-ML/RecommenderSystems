@@ -14,7 +14,7 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 4. Navigate to the same folder. (Where python file was placed.)
 5. Please type (For installation of openpyxl module)
 
-	```pip3 install openpyxl``` 
+	```sudo pip3 install openpyxl``` 
 6. Please type
 
 	```python3 Parameter_reductions.py```

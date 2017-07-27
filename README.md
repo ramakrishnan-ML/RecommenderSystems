@@ -23,7 +23,7 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 
 6. Navigate to the root folder.
 
-	``` cd..```
+	``` cd ..```
 7. Download Recommendation-process.py (Clone or Download option in right top) in the Recommendations folder.
 8. Please type (For installation of openpyxl module)
 

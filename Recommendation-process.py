@@ -274,6 +274,9 @@ def SetTarget():
 
 def WriteOutputFile():
     file = open("Recommendation-summary.txt", "w")
+    file.write("****************************************************************************************************\n")
+    file.write("                                     LEDSafari CO2 Calculator                                       \n")
+    file.write("****************************************************************************************************\n")
 
     file.write("\n")
     file.write("Hi ")
@@ -283,32 +286,137 @@ def WriteOutputFile():
     file.write(",")
     file.write("\n")
     file.write("\n")
+    file.write("Thank you once again for using LEDSafari's Carbon emission calculator.")
+    file.write("\n")
+    file.write("\n")
     file.write("Your recommendation details are given below :")
     file.write("\n")
     file.write("\n")
     file.write("The parameters and the corresponding frequencies are ")
     file.write("\n")
     file.write("\n")
-    file.write("********************************* Before Recommendation process **************************************\n")
+    file.write("****************************************************************************************************\n")
+    file.write("                                    Your current lifestyle                                          \n")
+    file.write("****************************************************************************************************\n")
     ind = 0
     for i in parameter:
+        file.write("-->")
+        file.write(" ")
         file.write(i)
         file.write(" - ")
         file.write(str(originalFrequency[ind]))
+        file.write("  ")
+        if (i == 'Shower'):
+            file.write('min/week')
+        if(i == 'Bath'):
+            file.write('times/week')
+        if(i == 'Toilet'):
+            file.write('times/day')
+        if(i == 'Brushing teeth'):
+            file.write('Washing hands')
+        if(i == 'Shaving'):
+            file.write('times/week')
+        if(i == 'Washing'):
+            file.write('kg/week')
+        if(i == 'Drying'):
+            file.write('kg/week')
+        if(i == 'Boiling water (tea/coffee)'):
+            file.write('L/day')
+        if(i == 'Doing the dishes manually'):
+            file.write('times/week')
+        if(i == 'Dishwasher'):
+            file.write('cycles/week')
+        if(i == 'Television'):
+            file.write('hours/week')
+        if(i == 'Personal computer'):
+            file.write('hours/day')
+        if(i == 'Mobile phone'):
+            file.write('hours/day')
+        if(i == 'Tablet'):
+            file.write('hours/day')
+        if(i == 'Lighting technology around the house'):
+            file.write('hours/day')
+
         file.write("\n")
         file.write("\n")
         ind +=1
 
     file.write("\n")
-    file.write("********************************* After Recommendation process **************************************\n")
+
+    file.write("****************************************************************************************************\n")
+    file.write("                                  Suggested lifestyle                                               \n")
+    file.write("****************************************************************************************************\n")
+    file.write("\n")
+    file.write(" Please note : In case of decimal values in some parameters and if decimal values are not feasible, you are kindly requested to round off to a lower possible minimum number.")
+    file.write("\n")
+    file.write("i.e In case of 12.6 in Dishwasher, you are requested to consider as 12 cycles/week.")
+    file.write("\n")
+    file.write("\n")
     ind1 = 0
     for i in parameter:
+        file.write("-->")
+        file.write(" ")
         file.write(i)
         file.write(" - ")
         file.write(str(freqList[ind1]))
+        file.write("  ")
+        if (i == 'Shower'):
+            file.write('min/week')
+        if(i == 'Bath'):
+            file.write('times/week')
+        if(i == 'Toilet'):
+            file.write('times/day')
+        if(i == 'Brushing teeth'):
+            file.write('Washing hands')
+        if(i == 'Shaving'):
+            file.write('times/week')
+        if(i == 'Washing'):
+            file.write('kg/week')
+        if(i == 'Drying'):
+            file.write('kg/week')
+        if(i == 'Boiling water (tea/coffee)'):
+            file.write('L/day')
+        if(i == 'Doing the dishes manually'):
+            file.write('times/week')
+        if(i == 'Dishwasher'):
+            file.write('cycles/week')
+        if(i == 'Television'):
+            file.write('hours/week')
+        if(i == 'Personal computer'):
+            file.write('hours/day')
+        if(i == 'Mobile phone'):
+            file.write('hours/day')
+        if(i == 'Tablet'):
+            file.write('hours/day')
+        if(i == 'Lighting technology around the house'):
+            file.write('hours/day')
         file.write("\n")
         file.write("\n")
         ind1 +=1
+    file.write("\n")
+    file.write("\n")
+
+    file.write("****************************************************************************************************\n ")
+    file.write("                              Benefits of suggested lifestyle                                       \n")
+    file.write("****************************************************************************************************\n")
+    if(set_target == 500):
+        target = 'High target'
+    if(set_target == 1000):
+        target = 'Low target'
+    file.write("Congratulations ! With this suggested lifestyle, you have achieved : ")
+    file.write(target)
+    file.write("\n")
+    file.write("\n")
+    file.write("The Carbon emission as per your current lifestyle is ")
+    file.write(str(guTotal))
+    file.write(" ")
+    file.write("kgCO2e ")
+    file.write("\n")
+    file.write("\n")
+    file.write("The Carbon emission as per suggested lifestyle is ")
+    file.write(str(guTotalNow))
+    file.write(" ")
+    file.write("kgCO2e ")
     file.write("\n")
     file.write("\n")
     file.close()
@@ -390,13 +498,7 @@ reductionRate = 0.9
 iterationCount = 0
 print("\n")
 print("Hi ", userName, ",", "\n")
-print("Your recommendation details are given below : ", "\n")
-print("The parameters and the corresponding frequencies are : \n")
-print("********************************* Before Recommendation process **************************************\n")
-ind = 0
-for i in parameter:
-    print(i, "-",originalFrequency[ind])
-    ind +=1
+print("Thank you for using LEDSafari's Carbon emission calculator. Please refer the text file named 'Recommendation-summary.txt'")
 #print("gu list is ", guList)
 set_target = SetTarget()
 
@@ -424,13 +526,6 @@ while (recoFlag is True):
     presentFreq = freqList[:]
  
 print("\n")
-print("********************************* After Recommendation process **************************************\n")
-ind1 = 0
-for i in parameter:
-    print(i, "-",freqList[ind1])
-    ind1 +=1
-print("\n")
-
 WriteOutputFile()
 
 

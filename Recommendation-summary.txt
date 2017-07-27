@@ -1,76 +1,98 @@
+****************************************************************************************************
+                                     LEDSafari CO2 Calculator                                       
+****************************************************************************************************
 
 Hi Philipp Kolenda,
+
+Thank you once again for using LEDSafari's Carbon emission calculator.
 
 Your recommendation details are given below :
 
 The parameters and the corresponding frequencies are 
 
-********************************* Before Recommendation process **************************************
-Shower - 20.0
+****************************************************************************************************
+                                    Your current lifestyle                                          
+****************************************************************************************************
+--> Shower - 20.0  min/week
 
-Bath - 0.0
+--> Bath - 0.0  times/week
 
-Toilet - 4.0
+--> Toilet - 4.0  times/day
 
-Brushing teeth - 2.0
+--> Brushing teeth - 2.0  Washing hands
 
-Washing hands - 12.0
+--> Washing hands - 12.0  
 
-Shaving - 1.0
+--> Shaving - 1.0  times/week
 
-Washing - 5.0
+--> Washing - 5.0  kg/week
 
-Drying - 5.0
+--> Drying - 5.0  kg/week
 
-Boiling water (tea/coffee) - 2.0
+--> Boiling water (tea/coffee) - 2.0  L/day
 
-Doing the dishes manually - 14.0
+--> Doing the dishes manually - 14.0  times/week
 
-Dishwasher - 0.0
+--> Dishwasher - 0.0  cycles/week
 
-Television - 2.0
+--> Television - 2.0  hours/week
 
-Personal computer - 10.0
+--> Personal computer - 10.0  hours/day
 
-Mobile phone - 2.0
+--> Mobile phone - 2.0  hours/day
 
-Tablet - 0.0
+--> Tablet - 0.0  hours/day
 
-Lighting technology around the house - 5.0
-
-
-********************************* After Recommendation process **************************************
-Shower - 20.0
-
-Bath - 0.0
-
-Toilet - 4.0
-
-Brushing teeth - 2.0
-
-Washing hands - 12.0
-
-Shaving - 1.0
-
-Washing - 5.0
-
-Drying - 5.0
-
-Boiling water (tea/coffee) - 2.0
-
-Doing the dishes manually - 12.6
-
-Dishwasher - 0.0
-
-Television - 2.0
-
-Personal computer - 10.0
-
-Mobile phone - 2.0
-
-Tablet - 0.0
-
-Lighting technology around the house - 5.0
+--> Lighting technology around the house - 5.0  hours/day
 
 
+****************************************************************************************************
+                                  Suggested lifestyle                                               
+****************************************************************************************************
+
+ Please note : In case of decimal values in some parameters and if decimal values are not feasible, you are kindly requested to round off to a lower possible minimum number.
+i.e In case of 12.6 in Dishwasher, you are requested to consider as 12 cycles/week.
+
+--> Shower - 20.0  min/week
+
+--> Bath - 0.0  times/week
+
+--> Toilet - 4.0  times/day
+
+--> Brushing teeth - 2.0  Washing hands
+
+--> Washing hands - 12.0  
+
+--> Shaving - 1.0  times/week
+
+--> Washing - 5.0  kg/week
+
+--> Drying - 5.0  kg/week
+
+--> Boiling water (tea/coffee) - 2.0  L/day
+
+--> Doing the dishes manually - 12.6  times/week
+
+--> Dishwasher - 0.0  cycles/week
+
+--> Television - 2.0  hours/week
+
+--> Personal computer - 10.0  hours/day
+
+--> Mobile phone - 2.0  hours/day
+
+--> Tablet - 0.0  hours/day
+
+--> Lighting technology around the house - 5.0  hours/day
+
+
+
+****************************************************************************************************
+                               Benefits of suggested lifestyle                                       
+****************************************************************************************************
+Congratulations ! With this suggested lifestyle, you have achieved : High target
+
+The Carbon emission as per your current lifestyle is 503.55359321666674 kgCO2e 
+
+The Carbon emission as per suggested lifestyle is 481.33044765666676 kgCO2e 
 

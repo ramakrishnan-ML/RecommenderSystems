@@ -273,7 +273,7 @@ def SetTarget():
     return targ
 
 def WriteOutputFile():
-    file = open("Recommendation.txt", "w")
+    file = open("Recommendation-summary.txt", "w")
 
     file.write("\n")
     file.write("Hi ")

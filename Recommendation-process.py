@@ -230,14 +230,11 @@ def ReduceEmissions(redRate, originalFreqFlag, target):
         maxParImp, reducedValue, newFreqList = FindParamImpact(maxGUIndex, rate, parListTemp)
         freqList = newFreqList[:]
         presentFreq = freqList[:]
-        print("New frequency list", newFreqList)
         gu = 0.0
         for val in maxParImp:
-            print("Reduced value", reducedValue)
             freqList[val] = reducedValue
             gnameStr = 'G'
             gnameStr += str(maxGUIndex + 1)
-            print(freqList)
             gu = CalcGValues(gnameStr, freqList, constValList)
             guTotalNow = ((guTotalNow - guList[maxGUIndex]) + gu)
     

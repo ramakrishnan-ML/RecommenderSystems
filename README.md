@@ -8,18 +8,27 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 
 ### Installation setup
 1. Open terminal in Mac or Command prompt in windows.
-2. Please create a directory / folder called Data.
+2. Please create a working directory.
+ 
+ 	``` mkdir Recommendations ```
+3. Navigation to the Recommendations folder.
+	
+	```cd Recommendations```
+
+4. Please create a directory or folder called Data.
 
 	``` mkdir Data ```
-3. Please place the user file (BetaCalculator_*.xlsx) renamed as 'source.xlsx' under Data folder.
-4. Navigate to the root folder.
+
+5. Please place the user file (BetaCalculator_*.xlsx) renamed as 'source.xlsx' under Recommendations/Data folder. (As usual file placement outside Mac terminal)
+
+6. Navigate to the root folder.
 
 	``` cd..```
-5. Download Recommendations.py (Clone or download option in right top) in the same root folder (A folder before Data).
-5. Please type (For installation of openpyxl module)
+7. Download Recommendations.py (Clone or download option in right top) in the same root folder (A folder before Data).
+8. Please type (For installation of openpyxl module)
 
 	```sudo pip3 install openpyxl``` 
-6. Please type
+9. Please type
 
 	```python3 Parameter_reductions.py```
 

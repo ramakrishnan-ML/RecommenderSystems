@@ -24,12 +24,12 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 6. Navigate to the root folder.
 
 	``` cd..```
-7. Download Recommendations.py (Clone or download option in right top) in the Recommendations folder.
+7. Download Recommendation-process.py (Download option in right top) in the Recommendations folder.
 8. Please type (For installation of openpyxl module)
 
 	```sudo pip3 install openpyxl``` 
 9. Please type
 
-	```python3 Parameter_reductions.py```
+	```python3 Recommendation-process.py```
 
 Output will contain various recommendation percentages in different parameters.			

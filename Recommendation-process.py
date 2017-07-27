@@ -1,5 +1,11 @@
 import openpyxl as opyxl
 
+def GetUserDetails():
+    userName = WS['B1'].value
+    return userName
+
+
+
 def ReadValues(cellStr, cellStart, cellEnd):
         values = []
         for i in range(cellStart, cellEnd + 1):
@@ -309,6 +315,7 @@ presentFreq = []
 
 
 ################### Iteration function calls #########################################
+userName = GetUserDetails()
 frequency = ReadValues(freqCellIndex, freqCellStart, freqCellEnd)
 freqList = list(map(float, frequency))
 presentFreq = freqList[:]
@@ -340,8 +347,11 @@ guList = MakeGuList()
 recoFlag = RecommendationChecker()
 reductionRate = 0.9
 iterationCount = 0
+print("\n")
+print("Hi ", userName, ",", "\n")
+print("Your recommendation details are given below : ", "\n")
+print("The parameters we considered are: ",parameter,"\n")
 print("*********************************Before Recommendation process **************************************\n")
-print("Parameters : ",parameter,"\n")
 print("Frequencies : ", originalFrequency, "\n")
 #print("gu list is ", guList)
 set_target = SetTarget()
@@ -371,8 +381,7 @@ while (recoFlag is True):
  
 print("\n")
 print("********************************* After Recommendation process **************************************\n")
-print("Parameters : \n", parameter, "\n")
-print("Frequencies : \n", freqList, "\n")
+print("Frequencies : ", freqList, "\n")
 
 
 

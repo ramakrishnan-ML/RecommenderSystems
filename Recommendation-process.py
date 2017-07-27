@@ -1,10 +1,8 @@
 import openpyxl as opyxl
 
 def GetUserDetails():
-    userName = WS['B1'].value
-    return userName
-
-
+    name = WS['B1'].value
+    return name
 
 def ReadValues(cellStr, cellStart, cellEnd):
         values = []
@@ -272,7 +270,50 @@ def SetTarget():
         targ = 1000
     else:
         targ = 500
-    return targ    
+    return targ
+
+def WriteOutputFile():
+    file = open("Recommendation.txt", "w")
+
+    file.write("\n")
+    file.write("Hi ")
+    #file.write(userName)
+   # ",", "\n")
+    file.write(userName)
+    file.write(",")
+    file.write("\n")
+    file.write("\n")
+    file.write("Your recommendation details are given below :")
+    file.write("\n")
+    file.write("\n")
+    file.write("The parameters and the corresponding frequencies are ")
+    file.write("\n")
+    file.write("\n")
+    file.write("********************************* Before Recommendation process **************************************\n")
+    ind = 0
+    for i in parameter:
+        file.write(i)
+        file.write(" - ")
+        file.write(str(originalFrequency[ind]))
+        file.write("\n")
+        file.write("\n")
+        ind +=1
+
+    file.write("\n")
+    file.write("********************************* After Recommendation process **************************************\n")
+    ind1 = 0
+    for i in parameter:
+        file.write(i)
+        file.write(" - ")
+        file.write(str(freqList[ind1]))
+        file.write("\n")
+        file.write("\n")
+        ind1 +=1
+    file.write("\n")
+    file.write("\n")
+    file.close()
+
+
 
 #################### Hardcoded values - File details ################################
 file = 'Data/source.xlsx'
@@ -350,8 +391,8 @@ iterationCount = 0
 print("\n")
 print("Hi ", userName, ",", "\n")
 print("Your recommendation details are given below : ", "\n")
-print("The parameters and the corresponding frequencies are : ",parameter,"\n")
-print("*********************************Before Recommendation process **************************************\n")
+print("The parameters and the corresponding frequencies are : \n")
+print("********************************* Before Recommendation process **************************************\n")
 ind = 0
 for i in parameter:
     print(i, "-",originalFrequency[ind])
@@ -389,6 +430,8 @@ for i in parameter:
     print(i, "-",freqList[ind1])
     ind1 +=1
 print("\n")
+
+WriteOutputFile()
 
 
 

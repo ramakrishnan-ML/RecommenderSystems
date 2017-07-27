@@ -272,7 +272,7 @@ def SetTarget():
     return targ    
 
 #################### Hardcoded values - File details ################################
-file = 'Data/source1.xlsx'
+file = 'Data/source.xlsx'
 defaultSheet = 'Data Aggregation'
 WB = opyxl.load_workbook(file, data_only= True)
 WS = WB[defaultSheet]
@@ -343,7 +343,9 @@ guList = MakeGuList()
 recoFlag = RecommendationChecker()
 reductionRate = 0.9
 iterationCount = 0
-print("Before recommendation",originalFrequency,"\n")
+print("*********************************Before Recommendation process **************************************\n")
+print("Parameters : ",parameter,"\n")
+print("Frequencies : ", originalFrequency, "\n")
 #print("gu list is ", guList)
 set_target = SetTarget()
 
@@ -371,7 +373,9 @@ while (recoFlag is True):
     presentFreq = freqList[:]
  
 print("\n")
-print("After recommendation", freqList)
+print("********************************* After Recommendation process **************************************\n")
+print("Parameters : \n", parameter, "\n")
+print("Frequencies : \n", freqList, "\n")
 
 
 

@@ -24,7 +24,7 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 6. Navigate to the root folder.
 
 	``` cd..```
-7. Download Recommendations.py (Clone or download option in right top) in the same root folder (A folder before Data).
+7. Download Recommendations.py (Clone or download option in right top) in the Recommendations folder.
 8. Please type (For installation of openpyxl module)
 
 	```sudo pip3 install openpyxl``` 

@@ -350,9 +350,12 @@ iterationCount = 0
 print("\n")
 print("Hi ", userName, ",", "\n")
 print("Your recommendation details are given below : ", "\n")
-print("The parameters we considered are: ",parameter,"\n")
+print("The parameters and the corresponding frequencies are : ",parameter,"\n")
 print("*********************************Before Recommendation process **************************************\n")
-print("Frequencies : ", originalFrequency, "\n")
+ind = 0
+for i in parameter:
+    print(i, "-",originalFrequency[ind])
+    ind +=1
 #print("gu list is ", guList)
 set_target = SetTarget()
 
@@ -381,7 +384,11 @@ while (recoFlag is True):
  
 print("\n")
 print("********************************* After Recommendation process **************************************\n")
-print("Frequencies : ", freqList, "\n")
+ind1 = 0
+for i in parameter:
+    print(i, "-",freqList[ind1])
+    ind1 +=1
+print("\n")
 
 
 

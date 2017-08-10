@@ -1,0 +1,48 @@
+Hello Philipp Kolenda,
+
+Thank you for using LEDSafari Carbon Calculator! We appreciate your interest towards greening your lifestyle and we hope you find our recommendations useful.
+
+Based on your input, your current carbon footprint is 643.76 kgCO2e. This is equivalent to:
+
+216.03 kilometeres in a medium car
+
+160.66 kilometeres in a plane
+
+321.88 trees absorbing CO2
+
+The first step to switching to a green life is to make basic changes in the way you live. Based on the preferences, given by you in the Style change sheet, you are willing to make the following changes:
+
+From
+
+Normal shower headToWater saving shower head (flow reduction)
+
+From
+
+Standard toiletToToilet with two flush options (urine/faeces)
+
+From
+
+I use a dishwasher and always fill it completely before runningToI don't have a dishwasher
+
+From
+
+LCD TVToLED TV
+
+From
+
+TabletToI don't have a tablet
+
+
+
+On making the changes, you have achieved a 21.78 % reduction in your emissions. Great work! Now your consumption levels are analysed for the most significant parameters. Based on the numbers, we make the following consumption reduction suggestions for you:
+
+Reduce 'Doing the dishes manually' to 10.0 %.
+
+On completion of the style and the consumption changes your final emissions are 481.33044765666676 kgCO2e. By making these changes, your lifestyle has now reached the  High  target of 500 kgCO2e per year. The results of the emissions saved is equivalent to:
+
+161.52 kilometeres in a medium car
+
+120.12 kilometeres in a plane
+
+240.67 trees absorbing CO2
+

@@ -1,0 +1,36 @@
+Exercise 1:
+	--> Train data : data_batch_1.mat
+	--> Validation data : data_batch_2.mat
+	--> Test data : test_batch.mat
+
+ 
+Function : (Python)
+	* i/p : Reads the data from CIFAR-10 batch file.
+		--> Filename : data_batch_*
+		--> Folder : cifar-batches-py
+
+	* Step 1: Done
+		--> Reading files for train, validation, test.
+			--> List of keys in the dictionary.
+				--> [b'batch_label', b'labels', b'data', b'filenames']
+
+	* Step 2: Initialisation of params
+		--> Find out the value of d.
+		--> Value of K is 10.
+		--> Done
+
+	* Step 3:
+
+
+
+
+
+
+
+
+
+
+
+
+
+

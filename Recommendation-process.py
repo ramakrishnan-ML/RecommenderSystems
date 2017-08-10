@@ -1,8 +1,13 @@
 import openpyxl as opyxl
+import matplotlib.pyplot as plt
 
 def GetUserDetails():
     name = WS['B1'].value
     return name
+
+def GetOriginalFootPrint():
+    footPrint = WS['B27'].value
+    return footPrint
 
 def ReadValues(cellStr, cellStart, cellEnd):
         values = []
@@ -241,7 +246,9 @@ def ReduceEmissions(redRate, originalFreqFlag, target):
             gnameStr += str(maxGUIndex + 1)
             gu = CalcGValues(gnameStr, freqList, constValList)
             guTotalNow = ((guTotalNow - guList[maxGUIndex]) + gu)
-    
+
+        reducedParamList.append(maxParImp[0])
+
        # print(rate)
        # print(guTotalNow)
         if((guTotalNow > target) & (rate >0.5)):
@@ -422,14 +429,226 @@ def WriteOutputFile():
     file.close()
 
 
+def displayMainOutput(flag):
+    if(flag is True):
+        print("\n")
+        print("Hi ", userName, ",", "\n")
+        print("Thank you for using LEDSafari's Carbon emission calculator. Please refer the text file named 'Recommendation-summary.txt'")
+    else:
+        print("Hi ", userName, ",", "\n")
+        print("Thank you for using LEDSafari's Carbon emission calculator. Your current lifestyle is itself under a very good state. Cheers !")
 
-#################### Hardcoded values - File details ################################
+
+def EquivalencyCalc(footPrint):
+    ##**** Note: Based on carbon emission equivalency calculations ***##
+    car = (footPrint / 2.98)
+    plane = (footPrint / 4.007)
+    tree = (footPrint / 2)
+
+    return car, plane, tree
+
+def GetColValues(workbook, col, start, end):
+    colStr = col
+    columnValList = []
+    for val in range(start, end):
+        colVal = (col + str(val))
+        columnVal = workbook[colVal].value
+        columnValList.append(columnVal)
+    return columnValList
+
+def GetStyleChanges():
+    ## Getting Style change sheet here instead of data aggregation sheet.
+    sheet = 'Style Change'
+    WS_styleChange = WB[sheet]
+
+    Col_A = GetColValues(WS_styleChange, 'A', 4, 17) ## Hardcoded value based on Style change sheet format.
+    Col_C = GetColValues(WS_styleChange, 'C', 4, 17)
+
+    changeList = []
+    for i in range(len(Col_A)):
+        if(Col_A[i] != Col_C[i]):
+            changeList.append(i)
+
+    return changeList, Col_A, Col_C
+
+
+def CalcReductionPercent(option):
+    if(option == 'Style'):
+        numerator = (initialFootPrint - guTotal)
+        denominator = initialFootPrint
+        percent = (numerator / denominator) * 100
+        return percent
+
+def CalcFinalReduction(par):
+    originalParVal = originalFrequency[par]
+    reducedParVal = presentFreq[par]
+
+    numerator = (originalParVal - reducedParVal)
+    denominator = originalParVal
+    percent = (numerator / denominator) * 100
+
+    return percent
+
+def WriteEnhancedOutputFile():
+    file =  open("E-Recommendation-summary.txt", 'w')
+    file.write("Hello ")
+    file.write(userName)
+    file.write(",")
+
+    file.write("\n")
+    file.write("\n")
+
+    file.write("Thank you for using LEDSafari Carbon Calculator! We appreciate your interest towards greening your lifestyle and we hope you find our recommendations useful.")
+
+    file.write("\n")
+    file.write("\n")
+
+    file.write("Based on your input, your current carbon footprint is ")
+    footprint = round(initialFootPrint, 2)
+    file.write(str(footprint))
+    file.write(" kgCO2e")
+    file.write(". This is equivalent to:")
+
+    file.write("\n")
+    file.write("\n")
+
+    mediumCar, plane, trees = EquivalencyCalc(initialFootPrint)
+
+    mediumCar = round(mediumCar, 2)
+    plane = round(plane, 2)
+    trees = round(trees, 2)
+
+    file.write(str(mediumCar))
+    file.write(" kilometeres in a medium car")
+
+    file.write("\n")
+    file.write("\n")
+
+    file.write(str(plane))
+    file.write(" kilometeres in a plane")
+
+    file.write("\n")
+    file.write("\n")
+
+    file.write(str(trees))
+    file.write(" trees absorbing CO2")
+
+    file.write("\n")
+    file.write("\n")
+
+    file.write("The first step to switching to a green life is to make basic changes in the way you live. Based on the preferences, given by you in the Style change sheet, you are willing to make the following changes:")
+
+    file.write("\n")
+    file.write("\n")
+
+    styleChangeIndices, A, C = GetStyleChanges()
+
+    if(len(styleChangeIndices) > 0) :
+        for val in styleChangeIndices:
+            file.write("From")
+            file.write("\n")
+            file.write("\n")
+            a_val = A[val]
+            file.write(str(a_val))
+            file.write("To")
+            c_val = C[val]
+            file.write(str(c_val))
+            file.write("\n")
+            file.write("\n")
+
+        file.write("\n")
+        file.write("\n")
+    else:
+        file.write("None")
+        file.write("\n")
+        file.write("\n")
+
+    percentReduction = CalcReductionPercent('Style')
+    percentReduction = round(percentReduction, 2)
+    file.write("On making the changes, you have achieved a ")
+    file.write(str(percentReduction))
+    file.write(" % reduction in your emissions. Great work! Now your consumption levels are analysed for the most significant parameters. Based on the numbers, we make the following consumption reduction suggestions for you:")
+
+    file.write("\n")
+    file.write("\n")
+
+    paramReductionList = list(set(reducedParamList))
+
+    for val in paramReductionList:
+        file.write("Reduce ")
+        file.write("'")
+        parVal = parameter[val]
+        file.write(str(parVal))
+        file.write("'")
+        file.write(" to ")
+        paramFinalRed = CalcFinalReduction(val)
+        paramFinalRed = round(paramFinalRed, 2)
+        file.write(str(paramFinalRed))
+        file.write(" %.")
+
+    file.write("\n")
+    file.write("\n")
+
+    file.write("On completion of the style and the consumption changes your final emissions are ")
+    file.write(str(guTotalNow))
+    file.write(" kgCO2e. By making these changes, your lifestyle has now reached the  ")
+    if(set_target == 500):
+        file.write('High ')
+    else:
+        file.write('Low ')
+    file.write(" target of ")
+    file.write(str(set_target))
+    file.write(" kgCO2e per year. The results of the emissions saved is equivalent to:")
+
+    file.write("\n")
+    file.write("\n")
+
+    mediumCar, plane, trees = EquivalencyCalc(guTotalNow)
+
+    mediumCar = round(mediumCar, 2)
+    plane = round(plane, 2)
+    trees = round(trees, 2)
+
+    file.write(str(mediumCar))
+    file.write(" kilometeres in a medium car")
+
+    file.write("\n")
+    file.write("\n")
+
+    file.write(str(plane))
+    file.write(" kilometeres in a plane")
+
+    file.write("\n")
+    file.write("\n")
+
+    file.write(str(trees))
+    file.write(" trees absorbing CO2")
+
+    file.write("\n")
+    file.write("\n")
+
+def PlotGraph():
+    X = [1, 2, 3]
+    labels = ['Current', 'Green User', 'Suggested']
+    Y = [initialFootPrint, guTotal, guTotalNow]
+    plt.title("Dip in Carbon emission after recommendation")
+    plt.xlabel('Various stages')
+    plt.ylabel('Carbon emission level (in KgCO2e units)')
+    plt.xticks(X, labels)
+    plt.plot(X, Y)
+    plt.show()
+
+
+##############################################################################################
+#-------------------------- Main program starts here----------------------------------------#
+##############################################################################################
+
+#################### Step 1: Hardcoded values - Excel format details ################################
 file = 'Data/source.xlsx'
 defaultSheet = 'Data Aggregation'
 WB = opyxl.load_workbook(file, data_only= True)
 WS = WB[defaultSheet]
 
-################### Hardcoded values - Excel cell details ############################
 freqCellIndex = 'G'
 freqCellStart = 2
 freqCellEnd = 17
@@ -461,10 +680,15 @@ paramChangeFlag = False
 originalFrequency = []
 #parIndex = 0
 presentFreq = []
+reducedParamList = []
 
+####################################################################################################
+####################### Step 2: Reads the values from Excel #########################################
+#####################################################################################################
 
-################### Iteration function calls #########################################
 userName = GetUserDetails()
+initialFootPrint = GetOriginalFootPrint()
+
 frequency = ReadValues(freqCellIndex, freqCellStart, freqCellEnd)
 freqList = list(map(float, frequency))
 presentFreq = freqList[:]
@@ -493,40 +717,46 @@ guTotal = GetGUTotal()
 guTotalNow = guTotal
 guFood = 0.0 ## Hardcoded value
 guList = MakeGuList()
-recoFlag = RecommendationChecker()
-reductionRate = 0.9
-iterationCount = 0
-print("\n")
-print("Hi ", userName, ",", "\n")
-print("Thank you for using LEDSafari's Carbon emission calculator. Please refer the text file named 'Recommendation-summary.txt'")
-#print("gu list is ", guList)
-set_target = SetTarget()
 
-while (recoFlag is True):
-    paramChangeFlag = GetParamFlag()
-    if(paramChangeFlag == False):
-        if(iterationCount == 0):
-            recoFlag = ReduceEmissions(reductionRate, True, set_target)
+##########################################################################################
+################### Step 3: Main functionalities ##########################################
+#########################################################################################
+recoFlag = RecommendationChecker()
+displayMainOutput(recoFlag)
+if(recoFlag is True):
+    reductionRate = 0.9
+    iterationCount = 0
+    #print("gu list is ", guList)
+    set_target = SetTarget()
+
+    while (recoFlag is True):
+        paramChangeFlag = GetParamFlag()
+        if(paramChangeFlag == False):
+            if(iterationCount == 0):
+                recoFlag = ReduceEmissions(reductionRate, True, set_target)
+            else:
+                recoFlag = ReduceEmissions(reductionRate, False, set_target)
         else:
+            guLighting = CalcGValues('G1', freqList, constValList)
+            guTV = CalcGValues('G2', freqList, constValList)
+            guKitchen = CalcGValues('G3', freqList, constValList)
+            guLaundry = CalcGValues('G4',  freqList, constValList)
+            guTotal = GetGUTotal()
+            guTotalNow = guTotal
+            guFood = 0.0 ## Hardcoded value
+            guList = MakeGuList()
+            #print("gu list now is ", guList)
+            reductionRate = 0.9
             recoFlag = ReduceEmissions(reductionRate, False, set_target)
-    else:
-        guLighting = CalcGValues('G1', freqList, constValList)
-        guTV = CalcGValues('G2', freqList, constValList)
-        guKitchen = CalcGValues('G3', freqList, constValList)
-        guLaundry = CalcGValues('G4',  freqList, constValList)
-        guTotal = GetGUTotal()
-        guTotalNow = guTotal
-        guFood = 0.0 ## Hardcoded value
-        guList = MakeGuList()
-        #print("gu list now is ", guList)
-        reductionRate = 0.9
-        recoFlag = ReduceEmissions(reductionRate, False, set_target)
-        #parIndex = 0 
-        iterationCount = 1
-    presentFreq = freqList[:]
- 
-print("\n")
-WriteOutputFile()
+            #parIndex = 0
+            iterationCount = 1
+        presentFreq = freqList[:]
+
+    print("\n")
+    WriteOutputFile()
+    WriteEnhancedOutputFile()
+    PlotGraph()
+
 
 
 

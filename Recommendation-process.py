@@ -1,6 +1,6 @@
 import openpyxl as opyxl
 import matplotlib.pyplot as plt
-
+import numpy
 def GetUserDetails():
     name = WS['B1'].value
     return name

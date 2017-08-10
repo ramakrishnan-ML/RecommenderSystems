@@ -28,8 +28,13 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 8. Please type (For installation of openpyxl module)
 
 	```sudo pip3 install openpyxl``` 
-9. Please type
 
+9. Please type (For installation of matplotlib)
+
+	```sudo pip3 install matplotlib``` 
+
+10. Please type
+	
 	```python3 Recommendation-process.py```
 
 Output will contain reduced frequency levels in different parameters in the Python window and also in the text file named 'Recommendation-summary.txt'.			

@@ -1,6 +1,32 @@
+# LEDSafari
+# Approaches to Household Emission Reduction - Internship Spring '17
+# Python coder : Ramakrishnan Radhakrishnan with the domain knowledge assistance from Balasubramaniam Vishwanathan.
+# Courtesy:  Some of the codes utilised from the tips given in other sites. Special thanks to them !
+# Related reference materials in the Internship Report Spring '17: (Although strongly insisting the report to go through fully.)
+#   --> Excel - Python interface.
+#   --> Automation
+#   --> Consumption change
+#   --> Appendix 2: Consumption change algorithm (Strongly recommended)
+# (Please note:
+#   1. There are improvements made after the report is made due to the feedback / additional requirements.
+#   2. This Python file is optimised to the best level but still there may be extra variable(s) / functions present due to the complexity level.)
+#   Happy to answer your queries at r_ramakrishnan@hotmail.com
+#
+# ****************************************************
+#  Aim : To read a user's current lifestyle and his/her carbon emission levels and to suggest the reduction of regular Carbon emission levels in Python.
+#  Input : Excel file.
+#  Output : A text file containing suggestions, a graph.
+#  Algorithm : Consumption change algorithm (Self created and explained in Appendix 2)
+# ******************************************************
+# Code understanding humble tip : Please start from 'Step 3: Main functionalities' section.
+# Major keywords : Parameters, Frequencies.
+# ======================================================================================================================================================
+
+
+
 import openpyxl as opyxl
 import matplotlib.pyplot as plt
-import numpy
+
 def GetUserDetails():
     name = WS['B1'].value
     return name
@@ -78,6 +104,7 @@ def CalcGValues(gname, parList, constList):
     return g
 
 def GetGUTotal():
+    ##Note: For this consumption change algorithm, guFood is omitted. Hence guTotal is a summation of other 4 values.
     return (guLighting + guTV + guKitchen + guLaundry)
 
 def MakeGuList():
@@ -117,6 +144,7 @@ def PickMaxImpact(current, new):
     else:
         return False
 
+## Aim : This function picks out the most impactful parameter for the reduction.
 def FindParamImpact(index1, redRate, paramList):
     originalGU = guList[index1]
     defaultImpact = 0.0
@@ -153,6 +181,9 @@ def FindParamImpact(index1, redRate, paramList):
    # print("tentative par", tentativePar)
     return impactParam, redVal, tentativePar
 
+
+## Aim : To store the parameters list on which reduction suggestions have been given. (To monitor the saturation level of reduction rate - 0.5)
+## Also sets the param change flag once a particular parameter reaches to 0.5
 def StoreParListTemp(parlist, impactParams, presentGu, presentRate, paramChange):
     global parIndex
     global guNow
@@ -209,18 +240,18 @@ def GetPresentFrequency():
     global presentFreq
   #  print("Present freq in get", presentFreq)
     return presentFreq
-    
 
-def ReduceEmissions(redRate, originalFreqFlag, target):
-    global originalFrequency
-    global freqList
-    global guTotal
-    global guList
-    global parListTemp
+### Important function
+### Input : 1) Reduction rate : 0.9 / 0.7 / 0.5, 
+##          2) OriginalFreqFlag: True for first iteration, false for the upcoming iterations. 
+##          3) Target - High / Low target in emission levels.  
+## Output : 1) Suggests reduction in the most impactful parameter.
+##          2) Calculates new emission level based on suggestion.
+##          3) Based on new emission level, sends the 'True' or 'False' flag whether further reductions are needed.
+
+def ReduceEmissions(rate, originalFreqFlag, target):
     global guTotalNow
-    global presentFreq
-
-    rate = redRate
+    
     if(originalFreqFlag == True):
         freqList = originalFrequency
     else:
@@ -638,29 +669,32 @@ def PlotGraph():
     plt.plot(X, Y)
     plt.show()
 
-
 ##############################################################################################
 #-------------------------- Main program starts here----------------------------------------#
 ##############################################################################################
 
-#################### Step 1: Hardcoded values - Excel format details ################################
+#################### Step 1: Hardcoded values - Excel Workbook format set up details ################################
 file = 'Data/source.xlsx'
 defaultSheet = 'Data Aggregation'
-WB = opyxl.load_workbook(file, data_only= True)
-WS = WB[defaultSheet]
+WB = opyxl.load_workbook(file, data_only= True)   ## WB refers to the whole workbook.
+WS = WB[defaultSheet]                             ## WS refers to the particular worksheet.
 
-freqCellIndex = 'G'
-freqCellStart = 2
-freqCellEnd = 17
-
+### Parameters
 paramCellIndex = 'F'
 paramCellStart = 2
 paramCellEnd = 17
 
+### Frequencies for the corresponding parameters.
+freqCellIndex = 'G'
+freqCellStart = 2
+freqCellEnd = 17
+
+### Constants
 constCellIndex = 'F'
 constCellStart = 21
 constCellEnd = 40
 
+### Values for the corresponding constants.
 constValCellIndex = 'G'
 constValCellStart = 21
 constVallCellEnd = 40
@@ -723,6 +757,8 @@ guList = MakeGuList()
 #########################################################################################
 recoFlag = RecommendationChecker()
 displayMainOutput(recoFlag)
+
+## Recommendation procedures.
 if(recoFlag is True):
     reductionRate = 0.9
     iterationCount = 0
@@ -730,9 +766,16 @@ if(recoFlag is True):
     set_target = SetTarget()
 
     while (recoFlag is True):
+        ## paramChangeFlag -->  A parameter can be reduced upto 50% of its original value. If that parameter reaches that level,
+        ## suggestion for reduction of next parameter has to be considered. Hence the flag will change to 'True' if the reductionRate
+        ## variable reaches to 0.5 for that particular parameter. Then it will be reverted to 'False' for the next parameter and remains
+        ## false till it also reaches to 0.5. <--
         paramChangeFlag = GetParamFlag()
         if(paramChangeFlag == False):
             if(iterationCount == 0):
+                ## originalFreqFlag (2nd argument in Reduce Emissions) --> At very first iteration in calling ReduceEmissions, it is designed to utilise the original
+                ## frequency (From the source file) by marking 'True' and in the iterations thereafter, 'presentFreq' takes care of the new frequencies based on the 
+                ## suggestions at every iteration. Hence they are marked false <--
                 recoFlag = ReduceEmissions(reductionRate, True, set_target)
             else:
                 recoFlag = ReduceEmissions(reductionRate, False, set_target)
@@ -756,6 +799,7 @@ if(recoFlag is True):
     WriteOutputFile()
     WriteEnhancedOutputFile()
     PlotGraph()
+
 
 
 

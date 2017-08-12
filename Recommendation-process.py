@@ -251,6 +251,12 @@ def GetPresentFrequency():
 
 def ReduceEmissions(rate, originalFreqFlag, target):
     global guTotalNow
+    global originalFrequency
+    global freqList
+    global guTotal
+    global guList
+    global parListTemp
+    global presentFreq
     
     if(originalFreqFlag == True):
         freqList = originalFrequency
@@ -311,7 +317,7 @@ def SetTarget():
     return targ
 
 def WriteOutputFile():
-    file = open("Recommendation-summary.txt", "w")
+    file = open("O-Recommendation-summary.txt", "w")
     file.write("****************************************************************************************************\n")
     file.write("                                     LEDSafari CO2 Calculator                                       \n")
     file.write("****************************************************************************************************\n")
@@ -521,7 +527,10 @@ def CalcFinalReduction(par):
     return percent
 
 def WriteEnhancedOutputFile():
-    file =  open("E-Recommendation-summary.txt", 'w')
+    file =  open("Recommendation-summary.txt", 'w')
+    file.write("****************************************************************************************************\n")
+    file.write("                                     LEDSafari CO2 Calculator                                       \n")
+    file.write("****************************************************************************************************\n")
     file.write("Hello ")
     file.write(userName)
     file.write(",")
@@ -529,11 +538,15 @@ def WriteEnhancedOutputFile():
     file.write("\n")
     file.write("\n")
 
-    file.write("Thank you for using LEDSafari Carbon Calculator! We appreciate your interest towards greening your lifestyle and we hope you find our recommendations useful.")
+    file.write("Thank you for using LEDSafari Carbon Calculator! ")
+    file.write("We appreciate your interest towards greening your lifestyle and we hope you find our recommendations useful.")
 
     file.write("\n")
     file.write("\n")
 
+    file.write("****************************************************************************************************\n")
+    file.write("                                    Your current lifestyle                                          \n")
+    file.write("****************************************************************************************************\n")
     file.write("Based on your input, your current carbon footprint is ")
     footprint = round(initialFootPrint, 2)
     file.write(str(footprint))
@@ -549,24 +562,33 @@ def WriteEnhancedOutputFile():
     plane = round(plane, 2)
     trees = round(trees, 2)
 
+    file.write("\t")
+    file.write("--> ")
     file.write(str(mediumCar))
     file.write(" kilometeres in a medium car")
 
     file.write("\n")
     file.write("\n")
 
+    file.write("\t")
+    file.write("--> ")
     file.write(str(plane))
     file.write(" kilometeres in a plane")
 
     file.write("\n")
     file.write("\n")
 
+    file.write("\t")
+    file.write("--> ")
     file.write(str(trees))
     file.write(" trees absorbing CO2")
 
     file.write("\n")
     file.write("\n")
 
+    file.write("****************************************************************************************************\n")
+    file.write("                                    Change of styles                                                \n")
+    file.write("****************************************************************************************************\n")
     file.write("The first step to switching to a green life is to make basic changes in the way you live. Based on the preferences, given by you in the Style change sheet, you are willing to make the following changes:")
 
     file.write("\n")
@@ -576,12 +598,14 @@ def WriteEnhancedOutputFile():
 
     if(len(styleChangeIndices) > 0) :
         for val in styleChangeIndices:
+            file.write("*  ")
             file.write("From")
-            file.write("\n")
-            file.write("\n")
+            file.write("\t")
             a_val = A[val]
             file.write(str(a_val))
-            file.write("To")
+            file.write("\t")
+            file.write("------->")
+            file.write("\t")
             c_val = C[val]
             file.write(str(c_val))
             file.write("\n")
@@ -600,6 +624,12 @@ def WriteEnhancedOutputFile():
     file.write(str(percentReduction))
     file.write(" % reduction in your emissions. Great work! Now your consumption levels are analysed for the most significant parameters. Based on the numbers, we make the following consumption reduction suggestions for you:")
 
+
+    file.write("\n")
+    file.write("\n")
+    file.write("****************************************************************************************************\n")
+    file.write("                                    Reduction in consumption                                        \n")
+    file.write("****************************************************************************************************\n")
     file.write("\n")
     file.write("\n")
 
@@ -640,23 +670,40 @@ def WriteEnhancedOutputFile():
     plane = round(plane, 2)
     trees = round(trees, 2)
 
+    file.write("\t")
+    file.write("--> ")
     file.write(str(mediumCar))
     file.write(" kilometeres in a medium car")
 
     file.write("\n")
     file.write("\n")
 
+    file.write("\t")
+    file.write("--> ")
     file.write(str(plane))
     file.write(" kilometeres in a plane")
 
     file.write("\n")
     file.write("\n")
 
+    file.write("\t")
+    file.write("--> ")
     file.write(str(trees))
     file.write(" trees absorbing CO2")
 
     file.write("\n")
     file.write("\n")
+
+    file.write("The carbon emission dip has been shown in 'Carbon_emission_dip.png'. Kindly check that graph!")
+    file.write("\n")
+    file.write("\n")
+    file.write("Share your results with the friends. Keep the spirit going!")
+    file.write("\n")
+    file.write("\n")
+    file.write("Love,")
+    file.write("\n")
+    file.write("LEDSafari Carbon calculator Team")
+
 
 def PlotGraph():
     X = [1, 2, 3]
@@ -667,7 +714,7 @@ def PlotGraph():
     plt.ylabel('Carbon emission level (in KgCO2e units)')
     plt.xticks(X, labels)
     plt.plot(X, Y)
-    plt.show()
+    plt.savefig('Carbon_emission_reduction.png')
 
 ##############################################################################################
 #-------------------------- Main program starts here----------------------------------------#
@@ -796,9 +843,9 @@ if(recoFlag is True):
         presentFreq = freqList[:]
 
     print("\n")
-    WriteOutputFile()
+    #WriteOutputFile()
     WriteEnhancedOutputFile()
-    PlotGraph()
+    PlotGraph() 
 
 
 

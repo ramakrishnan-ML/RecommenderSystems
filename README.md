@@ -37,4 +37,4 @@ If Python-3.6 is not there, please download [here.](https://www.python.org/downl
 	
 	```python3 Recommendation-process.py```
 
-Output will contain reduced frequency levels in different parameters in the Python window and also in the text file named 'Recommendation-summary.txt'.			
+Output will contain reduced frequency levels in different parameters in the Python window and also in the text file named 'Recommendation-summary.txt'.	Also a graph named 'Carbon-emission-reduction.png'		
